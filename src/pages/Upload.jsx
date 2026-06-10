@@ -149,7 +149,7 @@ export default function Upload() {
           />
 
           {/* Select preferred way — bottom centre */}
-          <div style={{
+          <div className="select-way" style={{
             position: 'absolute', bottom: '64px', left: '50%', transform: 'translateX(-50%)',
             textAlign: 'center', zIndex: 15,
           }}>
@@ -189,7 +189,7 @@ export default function Upload() {
         <div style={{
           position: 'absolute', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
-          width: '352px', background: '#1A1B1C', zIndex: 50,
+          width: '352px', maxWidth: '90vw', background: '#1A1B1C', zIndex: 50,
         }}>
           <p style={{
             color: '#FCFCFC', fontSize: '14px', fontWeight: '600',
@@ -222,7 +222,7 @@ export default function Upload() {
 function DiamondOption({ side, icon, iconBg = '#FCFCFC', label, onClick }) {
   const isLeft = side === 'left'
   return (
-    <div style={{
+    <div className={isLeft ? 'upload-option-left' : 'upload-option-right'} style={{
       position: 'absolute',
       top: '50%',
       left: isLeft ? '25%' : '75%',
@@ -413,7 +413,7 @@ function CameraScreen({ onCapture, onBack, onError }) {
       {captured ? (
         <>
           <p style={{
-            position: 'absolute', top: '140px', left: '50%', transform: 'translateX(-50%)',
+            position: 'absolute', top: '28%', left: '50%', transform: 'translateX(-50%)',
             fontSize: '16px', fontWeight: '600', letterSpacing: '0.02em',
             textTransform: 'uppercase', color: '#FCFCFC', zIndex: 20,
             textShadow: '0 1px 8px rgba(0,0,0,0.5)',
@@ -421,20 +421,27 @@ function CameraScreen({ onCapture, onBack, onError }) {
             GREAT SHOT!
           </p>
 
-          <CameraTips light style={{
-            position: 'absolute', bottom: '40px', left: 0, right: 0, zIndex: 20,
-          }} />
-
-          {/* Back = retake */}
-          <div onClick={retake} style={{ ...cornerBtn, left: '32px', bottom: '90px', zIndex: 20 }}>
-            <DiamondArrow direction="left" light />
-            <span style={{ ...btnLabel, color: '#FCFCFC', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>BACK</span>
+          {/* Preview label + Retake / Use This Photo */}
+          <div style={{
+            position: 'absolute', bottom: '64px', left: 0, right: 0, zIndex: 20,
+            display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '28px',
+          }}>
+            <p style={{
+              fontSize: '24px', fontWeight: '600', color: '#FCFCFC',
+              textShadow: '0 1px 8px rgba(0,0,0,0.5)',
+            }}>
+              Preview
+            </p>
+            <div style={{ display: 'flex', gap: '20px' }}>
+              <button onClick={retake} style={previewBtnLight}>Retake</button>
+              <button onClick={() => onCapture(captured)} style={previewBtnDark}>Use This Photo</button>
+            </div>
           </div>
 
-          {/* Proceed — bottom right */}
-          <div onClick={() => onCapture(captured)} style={{ ...cornerBtn, right: '32px', bottom: '90px', zIndex: 20 }}>
-            <span style={{ ...btnLabel, color: '#FCFCFC', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>PROCEED</span>
-            <DiamondArrow direction="right" light />
+          {/* Back — bottom left */}
+          <div onClick={onBack} style={{ ...cornerBtn, left: '32px', zIndex: 20 }}>
+            <DiamondArrow direction="left" light />
+            <span style={{ ...btnLabel, color: '#FCFCFC', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>BACK</span>
           </div>
         </>
       ) : (
@@ -492,7 +499,7 @@ function CameraTips({ light, style }) {
       }}>
         TO GET BETTER RESULTS MAKE SURE TO HAVE
       </p>
-      <div style={{ display: 'flex', justifyContent: 'center', gap: '32px' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', gap: '16px 32px', flexWrap: 'wrap', padding: '0 16px' }}>
         {['NEUTRAL EXPRESSION', 'FRONTAL POSE', 'ADEQUATE LIGHTING'].map((tip) => (
           <span key={tip} style={{
             display: 'flex', alignItems: 'center', gap: '8px',
@@ -593,6 +600,18 @@ const cornerBtn = {
 const btnLabel = {
   fontSize: '14px', fontWeight: '600', letterSpacing: '-0.02em',
   textTransform: 'uppercase', color: '#1A1B1C', opacity: 0.85,
+}
+
+const previewBtnLight = {
+  background: '#F3F3F4', border: 'none', cursor: 'pointer',
+  color: '#1A1B1C', padding: '12px 28px',
+  fontSize: '16px', fontWeight: '500', fontFamily: 'inherit',
+}
+
+const previewBtnDark = {
+  background: '#1A1B1C', border: 'none', cursor: 'pointer',
+  color: '#FCFCFC', padding: '12px 28px',
+  fontSize: '16px', fontWeight: '500', fontFamily: 'inherit',
 }
 
 const dialogBtn = {

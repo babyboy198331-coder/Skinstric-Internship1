@@ -7,12 +7,14 @@ import Demographics from './pages/Demographics'
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/"            element={<Landing />} />
-      <Route path="/testing"     element={<Testing />} />
-      <Route path="/upload"      element={<Upload />} />
-      <Route path="/select"      element={<Select />} />
-      <Route path="/demographics" element={<Demographics />} />
-    </Routes>
+    <main style={{ display: 'contents' }}>
+      <Routes>
+        <Route path="/"            element={<Landing />} />
+        <Route path="/testing"     element={<Testing />} />
+        <Route path="/upload"      element={<Upload />} />
+        <Route path="/select"      element={<Select />} />
+        <Route path="/demographics" element={<Demographics />} />
+      </Routes>
+    </main>
   )
 }

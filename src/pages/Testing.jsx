@@ -224,7 +224,7 @@ function Dialog({ text, children }) {
   return (
     <div style={{
       position: 'absolute', top: '64px', left: '32px',
-      width: '420px', background: '#1a1a1a', zIndex: 50,
+      width: '420px', maxWidth: 'calc(100vw - 64px)', background: '#1a1a1a', zIndex: 50,
     }}>
       <p style={{
         color: '#fcfcfc', fontSize: '14px', fontWeight: '600',

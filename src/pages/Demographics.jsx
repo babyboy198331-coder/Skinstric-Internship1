@@ -80,7 +80,7 @@ export default function Demographics() {
   }
 
   return (
-    <div style={{
+    <div className="demo-page" style={{
       position: 'relative', width: '100vw', height: '100vh',
       background: '#FCFCFC', overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
@@ -104,12 +104,12 @@ export default function Demographics() {
       </div>
 
       {/* Three-column body */}
-      <div style={{
+      <div className="demo-body" style={{
         flex: 1, display: 'flex', gap: '16px',
         padding: '28px 32px 80px', minHeight: 0, alignItems: 'stretch',
       }}>
         {/* Left: category blocks (short, stacked at top) */}
-        <div style={{ width: '204px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
+        <div className="demo-left" style={{ width: '204px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {CATEGORIES.map(({ key, label }) => {
             const isActive = key === active
             return (
@@ -125,7 +125,7 @@ export default function Demographics() {
         </div>
 
         {/* Middle: main panel with confidence circle */}
-        <div style={{
+        <div className="demo-main" style={{
           flex: 1, background: '#F3F3F4', borderTop: '1px solid #1A1B1C',
           position: 'relative', padding: '20px 24px', minWidth: 0,
         }}>
@@ -140,7 +140,7 @@ export default function Demographics() {
         </div>
 
         {/* Right: confidence list */}
-        <div style={{
+        <div className="demo-right" style={{
           width: 'clamp(300px, 23vw, 446px)', flexShrink: 0,
           background: '#F3F3F4', borderTop: '1px solid #1A1B1C',
           display: 'flex', flexDirection: 'column', minHeight: 0,
@@ -228,7 +228,7 @@ function ConfidenceCircle({ pct }) {
   const size = (R + STROKE) * 2
 
   return (
-    <div style={{
+    <div className="demo-circle" style={{
       position: 'absolute', right: '20px', bottom: '20px',
       width: 'min(384px, 42vh)', height: 'min(384px, 42vh)',
     }}>
