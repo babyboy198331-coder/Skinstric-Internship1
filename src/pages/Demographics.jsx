@@ -81,8 +81,8 @@ export default function Demographics() {
 
   return (
     <div className="demo-page" style={{
-      position: 'relative', width: '100vw', height: '100vh',
-      background: '#FCFCFC', overflow: 'hidden',
+      position: 'relative', width: '100vw', minHeight: '100vh',
+      background: '#FCFCFC',
       display: 'flex', flexDirection: 'column',
     }}>
       <Navbar showEnterCode={false} section="ANALYSIS" />
@@ -92,7 +92,7 @@ export default function Demographics() {
         <p style={{ fontSize: '16px', fontWeight: '600', letterSpacing: '-0.02em', textTransform: 'uppercase', color: '#1A1B1C' }}>
           A.I. ANALYSIS
         </p>
-        <h1 style={{
+        <h1 className="demo-title" style={{
           fontSize: 'clamp(48px, 4vw, 72px)', fontWeight: '400',
           letterSpacing: '-0.04em', lineHeight: '1.05', color: '#1A1B1C', margin: '6px 0 4px',
         }}>
@@ -106,7 +106,7 @@ export default function Demographics() {
       {/* Three-column body */}
       <div className="demo-body" style={{
         flex: 1, display: 'flex', gap: '16px',
-        padding: '28px 32px 80px', minHeight: 0, alignItems: 'stretch',
+        padding: '20px 32px 16px', alignItems: 'stretch',
       }}>
         {/* Left: category blocks (short, stacked at top) */}
         <div className="demo-left" style={{ width: '204px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -167,27 +167,30 @@ export default function Demographics() {
         </div>
       </div>
 
-      {/* Bottom bar: BACK | note | RESET + CONFIRM */}
-      <div onClick={() => navigate('/select')} style={{ ...cornerBtn, left: '32px' }}>
-        <DiamondArrow direction="left" />
-        <span style={btnLabel}>BACK</span>
-      </div>
-
-      <p style={{
-        position: 'absolute', bottom: '46px', left: '50%', transform: 'translateX(-50%)',
-        fontSize: '14px', color: 'rgba(26,27,28,0.6)', zIndex: 20,
+      {/* Bottom bar: BACK | note | RESET + CONFIRM — in normal flow, can't overlap content */}
+      <div className="demo-footer" style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        gap: '16px', padding: '8px 32px 32px', flexShrink: 0, flexWrap: 'wrap',
+        position: 'relative', zIndex: 30, background: '#FCFCFC',
       }}>
-        If A.I. estimate is wrong, select the correct one.
-      </p>
+        <div
+          onClick={() => navigate('/select')}
+          style={{ display: 'flex', alignItems: 'center', gap: '14px', cursor: 'pointer', userSelect: 'none' }}
+        >
+          <DiamondArrow direction="left" />
+          <span style={btnLabel}>BACK</span>
+        </div>
 
-      <div style={{
-        position: 'absolute', bottom: '38px', right: '32px',
-        display: 'flex', gap: '10px', zIndex: 20,
-      }}>
-        <button onClick={handleReset} style={actionBtn}>RESET</button>
-        <button onClick={handleConfirm} style={{ ...actionBtn, background: '#1A1B1C', color: '#FCFCFC', border: '1px solid #1A1B1C' }}>
-          CONFIRM
-        </button>
+        <p style={{ fontSize: '14px', color: 'rgba(26,27,28,0.6)', textAlign: 'center' }}>
+          If A.I. estimate is wrong, select the correct one.
+        </p>
+
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button onClick={handleReset} style={actionBtn}>RESET</button>
+          <button onClick={handleConfirm} style={{ ...actionBtn, background: '#1A1B1C', color: '#FCFCFC', border: '1px solid #1A1B1C' }}>
+            CONFIRM
+          </button>
+        </div>
       </div>
     </div>
   )
@@ -314,12 +317,6 @@ function DiamondArrow({ direction }) {
 const listHeader = {
   fontSize: '13px', fontWeight: '600', letterSpacing: '0',
   textTransform: 'uppercase', color: '#1A1B1C',
-}
-
-const cornerBtn = {
-  position: 'absolute', bottom: '38px',
-  display: 'flex', alignItems: 'center', gap: '14px',
-  cursor: 'pointer', zIndex: 20, userSelect: 'none',
 }
 
 const btnLabel = {

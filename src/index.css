@@ -29,7 +29,8 @@ body {
   font-family: 'Roobert TRIAL', 'DM Sans', sans-serif;
   background: #fff;
   color: #1A1B1C;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 
 /* Phase 1 — rotating dotted diamonds */
@@ -90,14 +91,20 @@ body {
   }
   .demo-body {
     flex-direction: column !important;
-    padding-bottom: 140px !important;
+  }
+  .demo-footer {
+    justify-content: center !important;
+  }
+  .demo-title {
+    font-size: clamp(30px, 10vw, 48px) !important;
   }
   .demo-left {
     flex-direction: row !important;
     width: 100% !important;
   }
   .demo-left > div {
-    flex: 1;
+    flex: 1 1 0 !important;
+    height: 104px !important;
   }
   .demo-main {
     min-height: 340px;
