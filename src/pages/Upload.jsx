@@ -309,24 +309,23 @@ function CameraScreen({ onCapture, onBack, onError }) {
     }
   }, [onError])
 
-  const snap = () => {
-  const video = videoRef.current;
-  if (!video || !video.videoWidth) return;
+ const snap = () => {
+  const video = videoRef.current
+  if (!video || !video.videoWidth) return
   
-  const canvas = document.createElement('canvas');
-  // Ensure we capture full hardware stream dimensions
-  canvas.width  = video.videoWidth;
-  canvas.height = video.videoHeight;
+  const canvas = document.createElement('canvas')
+  // Capture the full hardware stream dimensions
+  canvas.width  = video.videoWidth
+  canvas.height = video.videoHeight
   
-  const ctx = canvas.getContext('2d');
+  const ctx = canvas.getContext('2d')
   
   // Clean draw without mirroring matrix transformations
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
   
-  // Set snapshot state and terminate camera tracks
-  setCaptured(canvas.toDataURL('image/jpeg', 0.9));
-  streamRef.current?.getTracks().forEach(t => t.stop());
-};
+  setCaptured(canvas.toDataURL('image/jpeg', 0.9))
+  streamRef.current?.getTracks().forEach(t => t.stop())
+}
 
   const retake = async () => {
     setCaptured(null)
