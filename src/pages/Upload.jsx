@@ -4,6 +4,24 @@ import Navbar from '../components/Navbar'
 
 const API_URL = 'https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo'
 
+/* ── Global camera stream registry ──
+   Every stream ever opened is tracked here, so no stream can leak —
+   even ones from StrictMode double-mounts or hot-reload races. */
+const activeStreams = new Set()
+
+async function openCameraStream() {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: { facingMode: 'user', width: { ideal: 1280 } },
+  })
+  activeStreams.add(stream)
+  return stream
+}
+
+function closeAllCameraStreams() {
+  activeStreams.forEach((stream) => stream.getTracks().forEach((t) => t.stop()))
+  activeStreams.clear()
+}
+
 /* Downscale image to max 1024px and return { dataUrl, base64 } */
 function processImage(src) {
   return new Promise((resolve, reject) => {
@@ -36,6 +54,9 @@ export default function Upload() {
   const [phase, setPhase]     = useState('choose')
   const [preview, setPreview] = useState(null)
   const [error, setError]     = useState('')
+
+  // Safety net: whatever happens, leaving this page kills the camera
+  useEffect(() => closeAllCameraStreams, [])
 
   const analyze = useCallback(async (dataUrl) => {
     setPhase('analyzing')
@@ -293,50 +314,59 @@ function SettingUpCamera({ onReady }) {
 
 /* ── Live camera capture screen ── */
 function CameraScreen({ onCapture, onBack, onError }) {
-  const videoRef  = useRef(null)
-  const streamRef = useRef(null)
+  const videoRef = useRef(null)
   const [captured, setCaptured] = useState(null) // dataUrl after snap
 
-  useEffect(() => {
-    let cancelled = false
-    navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 } } })
-      .then((stream) => {
-        if (cancelled) { stream.getTracks().forEach(t => t.stop()); return }
-        streamRef.current = stream
-        if (videoRef.current) videoRef.current.srcObject = stream
-      })
-      .catch(() => onError())
-    return () => {
-      cancelled = true
-      streamRef.current?.getTracks().forEach(t => t.stop())
+  // Fully release the camera: stop EVERY stream ever opened and detach the <video>
+  const stopCamera = useCallback(() => {
+    closeAllCameraStreams()
+    if (videoRef.current) {
+      videoRef.current.pause()
+      videoRef.current.srcObject = null
+    }
+  }, [])
+
+  const startCamera = useCallback(async () => {
+    try {
+      const stream = await openCameraStream()
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream
+      } else {
+        // video element gone (unmounted mid-request) — don't leak the stream
+        stream.getTracks().forEach(t => t.stop())
+        activeStreams.delete(stream)
+      }
+    } catch {
+      onError()
     }
   }, [onError])
 
- const snap = () => {
-  const video = videoRef.current
-  if (!video || !video.videoWidth) return
-  
-  const canvas = document.createElement('canvas')
-  // Capture the full hardware stream dimensions
-  canvas.width  = video.videoWidth
-  canvas.height = video.videoHeight
-  
-  const ctx = canvas.getContext('2d')
-  
-  // Clean draw without mirroring matrix transformations
-  ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
-  
-  setCaptured(canvas.toDataURL('image/jpeg', 0.9))
-  streamRef.current?.getTracks().forEach(t => t.stop())
-}
+  useEffect(() => {
+    startCamera()
+    return stopCamera
+  }, [startCamera, stopCamera])
 
-  const retake = async () => {
+  const snap = () => {
+    const video = videoRef.current
+    if (!video || !video.videoWidth) return
+
+    const canvas = document.createElement('canvas')
+    // Capture the full hardware stream dimensions
+    canvas.width  = video.videoWidth
+    canvas.height = video.videoHeight
+
+    const ctx = canvas.getContext('2d')
+
+    // Clean draw without mirroring matrix transformations
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+
+    setCaptured(canvas.toDataURL('image/jpeg', 0.9))
+    stopCamera()
+  }
+
+  const retake = () => {
     setCaptured(null)
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 } } })
-      streamRef.current = stream
-      if (videoRef.current) videoRef.current.srcObject = stream
-    } catch { onError() }
+    startCamera()
   }
 
   return (
