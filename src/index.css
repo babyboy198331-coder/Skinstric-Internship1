@@ -1,0 +1,55 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500&display=swap');
+@import "tailwindcss";
+
+/* Place Roobert TRIAL .woff2/.woff files in /public/fonts/ to activate */
+@font-face {
+  font-family: 'Roobert TRIAL';
+  src: url('/fonts/RoobertTRIAL-Regular.woff2') format('woff2'),
+       url('/fonts/RoobertTRIAL-Regular.woff')  format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Roobert TRIAL';
+  src: url('/fonts/RoobertTRIAL-Light.woff2') format('woff2'),
+       url('/fonts/RoobertTRIAL-Light.woff')  format('woff');
+  font-weight: 300;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Roobert TRIAL', 'DM Sans', sans-serif;
+  background: #fff;
+  color: #1A1B1C;
+  overflow: hidden;
+}
+
+/* Phase 1 — rotating dotted diamonds */
+@keyframes spin-cw {
+  from { transform: translate(-50%, -50%) rotate(45deg); }
+  to   { transform: translate(-50%, -50%) rotate(405deg); }
+}
+@keyframes spin-ccw {
+  from { transform: translate(-50%, -50%) rotate(45deg); }
+  to   { transform: translate(-50%, -50%) rotate(-315deg); }
+}
+.diamond-outer  { animation: spin-cw  70s linear infinite; }
+.diamond-mid    { animation: spin-ccw 55s linear infinite; }
+.diamond-inner  { animation: spin-cw  40s linear infinite; }
+
+@keyframes dots {
+  0%, 20%  { content: ''; }
+  40%      { content: '.'; }
+  60%      { content: '..'; }
+  80%, 100%{ content: '...'; }
+}
+.loading-dots::after {
+  content: '...';
+  animation: dots 1.2s steps(1) infinite;
+}
