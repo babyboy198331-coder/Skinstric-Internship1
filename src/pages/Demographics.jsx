@@ -41,14 +41,24 @@ export default function Demographics() {
     age:    sorted.age[0]?.[0]    || '',
     gender: sorted.gender[0]?.[0] || '',
   }) : null, [sorted])
-const [active, setActive] = useState('race');
-const [selected, setSelected] = useState(null);
+  const [active, setActive] = useState('race')
 
-useEffect(() => {
-  if (aiPicks && selected === null) {
-    setSelected(aiPicks);
-  }
-}, [aiPicks, selected]);
+  // Initialise from previously saved corrections (if they match this analysis), else AI picks
+  const [selected, setSelected] = useState(() => {
+    if (!aiPicks || !data) return null
+    let saved
+    try { saved = JSON.parse(localStorage.getItem('skinstric_demographics_selected')) } catch { saved = null }
+    const valid = saved
+      && data.race[saved.race]     !== undefined
+      && data.age[saved.age]       !== undefined
+      && data.gender[saved.gender] !== undefined
+    return valid ? saved : aiPicks
+  })
+
+  // Persist every change so corrections survive navigation and refresh
+  useEffect(() => {
+    if (selected) localStorage.setItem('skinstric_demographics_selected', JSON.stringify(selected))
+  }, [selected])
   if (!data || !sorted || !selected) return null
 
   const entries     = sorted[active]

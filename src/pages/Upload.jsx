@@ -50,6 +50,9 @@ export default function Upload() {
       const json = await res.json()
       if (!json.data) throw new Error('No data')
       localStorage.setItem('skinstric_demographics', JSON.stringify(json.data))
+      // New analysis — clear corrections from any previous photo
+      localStorage.removeItem('skinstric_demographics_selected')
+      localStorage.removeItem('skinstric_demographics_confirmed')
       try { localStorage.setItem('skinstric_preview', scaled) } catch { /* quota — preview optional */ }
       navigate('/select')
     } catch {
