@@ -41,11 +41,14 @@ export default function Demographics() {
     age:    sorted.age[0]?.[0]    || '',
     gender: sorted.gender[0]?.[0] || '',
   }) : null, [sorted])
+const [active, setActive] = useState('race');
+const [selected, setSelected] = useState(null);
 
-  const [active, setActive]     = useState('race')      // which category is open
-  const [selected, setSelected] = useState(null)        // { race, age, gender } keys
-  useEffect(() => { if (aiPicks && !selected) setSelected(aiPicks) }, [aiPicks, selected])
-
+useEffect(() => {
+  if (aiPicks && selected === null) {
+    setSelected(aiPicks);
+  }
+}, [aiPicks, selected]);
   if (!data || !sorted || !selected) return null
 
   const entries     = sorted[active]
