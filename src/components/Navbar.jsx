@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom'
 
-export default function Navbar({ showEnterCode = true }) {
+export default function Navbar({ showEnterCode = true, section = 'INTRO' }) {
   return (
     <nav style={{
       position: 'fixed',
@@ -38,7 +38,7 @@ export default function Navbar({ showEnterCode = true }) {
             textTransform: 'uppercase', color: '#1A1B1C',
             fontFamily: "'Roobert TRIAL', 'DM Sans', sans-serif",
           }}>
-            INTRO
+            {section}
           </span>
           <div style={{ width: '4px', height: '17px', border: '1px solid #1A1B1C', borderRadius: '2px', transform: 'scaleX(-1)' }} />
         </div>

@@ -41,6 +41,7 @@ export default function Demographics() {
     age:    sorted.age[0]?.[0]    || '',
     gender: sorted.gender[0]?.[0] || '',
   }) : null, [sorted])
+
   const [active, setActive] = useState('race')
 
   // Initialise from previously saved corrections (if they match this analysis), else AI picks
@@ -59,6 +60,7 @@ export default function Demographics() {
   useEffect(() => {
     if (selected) localStorage.setItem('skinstric_demographics_selected', JSON.stringify(selected))
   }, [selected])
+
   if (!data || !sorted || !selected) return null
 
   const entries     = sorted[active]
@@ -83,16 +85,16 @@ export default function Demographics() {
       background: '#FCFCFC', overflow: 'hidden',
       display: 'flex', flexDirection: 'column',
     }}>
-      <Navbar showEnterCode={false} />
+      <Navbar showEnterCode={false} section="ANALYSIS" />
 
       {/* Headings */}
-      <div style={{ padding: '86px 32px 0', flexShrink: 0 }}>
+      <div style={{ padding: '80px 32px 0', flexShrink: 0 }}>
         <p style={{ fontSize: '16px', fontWeight: '600', letterSpacing: '-0.02em', textTransform: 'uppercase', color: '#1A1B1C' }}>
           A.I. ANALYSIS
         </p>
         <h1 style={{
-          fontSize: 'clamp(48px, 5vw, 72px)', fontWeight: '300',
-          letterSpacing: '-0.05em', lineHeight: '1.1', color: '#1A1B1C', margin: '4px 0 2px',
+          fontSize: 'clamp(48px, 4vw, 72px)', fontWeight: '400',
+          letterSpacing: '-0.04em', lineHeight: '1.05', color: '#1A1B1C', margin: '6px 0 4px',
         }}>
           DEMOGRAPHICS
         </h1>
@@ -103,107 +105,87 @@ export default function Demographics() {
 
       {/* Three-column body */}
       <div style={{
-        flex: 1, display: 'flex', gap: '10px',
-        padding: '24px 32px 90px', minHeight: 0,
+        flex: 1, display: 'flex', gap: '16px',
+        padding: '28px 32px 80px', minHeight: 0, alignItems: 'stretch',
       }}>
-        {/* Left: category blocks */}
-        <div style={{ width: '196px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+        {/* Left: category blocks (short, stacked at top) */}
+        <div style={{ width: '204px', flexShrink: 0, display: 'flex', flexDirection: 'column', gap: '6px' }}>
           {CATEGORIES.map(({ key, label }) => {
             const isActive = key === active
             return (
-              <div
+              <CategoryBlock
                 key={key}
+                value={titleCase(selected[key])}
+                label={label}
+                active={isActive}
                 onClick={() => setActive(key)}
-                style={{
-                  flex: 1, cursor: 'pointer', padding: '12px 14px',
-                  background: isActive ? '#1A1B1C' : '#F3F3F4',
-                  borderTop: `1px solid ${isActive ? '#1A1B1C' : 'rgba(26,27,28,0.6)'}`,
-                  display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
-                  transition: 'background 0.15s ease',
-                }}
-              >
-                <p style={{
-                  fontSize: '14px', fontWeight: '600', letterSpacing: '-0.01em',
-                  color: isActive ? '#FCFCFC' : '#1A1B1C',
-                }}>
-                  {titleCase(selected[key])}
-                </p>
-                <p style={{
-                  fontSize: '14px', fontWeight: '600',
-                  color: isActive ? '#FCFCFC' : '#1A1B1C',
-                }}>
-                  {label}
-                </p>
-              </div>
+              />
             )
           })}
         </div>
 
-        {/* Middle: main panel with donut */}
+        {/* Middle: main panel with confidence circle */}
         <div style={{
-          flex: 1, background: '#F3F3F4', borderTop: '1px solid rgba(26,27,28,0.6)',
+          flex: 1, background: '#F3F3F4', borderTop: '1px solid #1A1B1C',
           position: 'relative', padding: '20px 24px', minWidth: 0,
         }}>
           <p style={{
-            fontSize: 'clamp(24px, 2.2vw, 40px)', fontWeight: '400',
+            fontSize: 'clamp(28px, 2.2vw, 40px)', fontWeight: '400',
             letterSpacing: '-0.02em', color: '#1A1B1C',
           }}>
             {titleCase(activeKey)}{active === 'age' ? ' y.o.' : ''}
           </p>
 
-          <ConfidenceDonut pct={pct} />
-
-          <p style={{
-            position: 'absolute', bottom: '16px', left: '24px', right: '24px',
-            fontSize: '12px', color: 'rgba(26,27,28,0.5)', textAlign: 'center',
-          }}>
-            If A.I. estimate is wrong, select the correct one.
-          </p>
+          <ConfidenceCircle pct={pct} />
         </div>
 
         {/* Right: confidence list */}
         <div style={{
-          width: '380px', flexShrink: 0,
-          background: '#F3F3F4', borderTop: '1px solid rgba(26,27,28,0.6)',
+          width: 'clamp(300px, 23vw, 446px)', flexShrink: 0,
+          background: '#F3F3F4', borderTop: '1px solid #1A1B1C',
           display: 'flex', flexDirection: 'column', minHeight: 0,
         }}>
           <div style={{
             display: 'flex', justifyContent: 'space-between',
-            padding: '16px 20px', flexShrink: 0,
+            padding: '18px 20px 12px', flexShrink: 0,
           }}>
             <span style={listHeader}>{CATEGORIES.find(c => c.key === active).label}</span>
             <span style={listHeader}>A.I. CONFIDENCE</span>
           </div>
 
           <div style={{ flex: 1, overflowY: 'auto' }}>
-            {entries.map(([key, score]) => {
-              const isSel = key === activeKey
-              return (
-                <ConfidenceRow
-                  key={key}
-                  label={titleCase(key)}
-                  pct={(score * 100).toFixed(2)}
-                  selected={isSel}
-                  onClick={() => handleRowClick(key)}
-                />
-              )
-            })}
+            {entries.map(([key, score]) => (
+              <ConfidenceRow
+                key={key}
+                label={titleCase(key)}
+                pct={(score * 100).toFixed(2)}
+                selected={key === activeKey}
+                onClick={() => handleRowClick(key)}
+              />
+            ))}
           </div>
         </div>
       </div>
 
-      {/* Bottom bar */}
+      {/* Bottom bar: BACK | note | RESET + CONFIRM */}
       <div onClick={() => navigate('/select')} style={{ ...cornerBtn, left: '32px' }}>
         <DiamondArrow direction="left" />
         <span style={btnLabel}>BACK</span>
       </div>
 
+      <p style={{
+        position: 'absolute', bottom: '46px', left: '50%', transform: 'translateX(-50%)',
+        fontSize: '14px', color: 'rgba(26,27,28,0.6)', zIndex: 20,
+      }}>
+        If A.I. estimate is wrong, select the correct one.
+      </p>
+
       <div style={{
-        position: 'absolute', bottom: '36px', right: '32px',
-        display: 'flex', gap: '14px', zIndex: 20,
+        position: 'absolute', bottom: '38px', right: '32px',
+        display: 'flex', gap: '10px', zIndex: 20,
       }}>
         <button onClick={handleReset} style={actionBtn}>RESET</button>
-        <button onClick={handleConfirm} style={{ ...actionBtn, background: '#1A1B1C', color: '#FCFCFC' }}>
+        <button onClick={handleConfirm} style={{ ...actionBtn, background: '#1A1B1C', color: '#FCFCFC', border: '1px solid #1A1B1C' }}>
           CONFIRM
         </button>
       </div>
@@ -211,17 +193,44 @@ export default function Demographics() {
   )
 }
 
-/* ── SVG donut progress ── */
-function ConfidenceDonut({ pct }) {
-  const R = 150
-  const STROKE = 4
+/* ── Left category block: value top, label bottom ── */
+function CategoryBlock({ value, label, active, onClick }) {
+  const [hovered, setHovered] = useState(false)
+  const bg = active ? '#1A1B1C' : hovered ? '#E1E1E2' : '#F3F3F4'
+  const fg = active ? '#FCFCFC' : '#1A1B1C'
+  return (
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        height: '104px', flexShrink: 0, cursor: 'pointer', padding: '12px 14px',
+        background: bg, borderTop: '1px solid #1A1B1C',
+        display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+        transition: 'background 0.15s ease',
+      }}
+    >
+      <p style={{ fontSize: '14px', fontWeight: '600', letterSpacing: '-0.01em', textTransform: 'uppercase', color: fg }}>
+        {value}
+      </p>
+      <p style={{ fontSize: '14px', fontWeight: '600', textTransform: 'uppercase', color: fg }}>
+        {label}
+      </p>
+    </div>
+  )
+}
+
+/* ── Thin-ring confidence circle, bottom-right of panel ── */
+function ConfidenceCircle({ pct }) {
+  const R = 191
+  const STROKE = 2
   const C = 2 * Math.PI * R
   const size = (R + STROKE) * 2
 
   return (
     <div style={{
-      position: 'absolute', right: '24px', bottom: '48px',
-      width: 'min(340px, 38vh)', height: 'min(340px, 38vh)',
+      position: 'absolute', right: '20px', bottom: '20px',
+      width: 'min(384px, 42vh)', height: 'min(384px, 42vh)',
     }}>
       <svg viewBox={`0 0 ${size} ${size}`} style={{ width: '100%', height: '100%' }}>
         <circle
@@ -232,15 +241,15 @@ function ConfidenceDonut({ pct }) {
           cx={size / 2} cy={size / 2} r={R}
           fill="none" stroke="#1A1B1C" strokeWidth={STROKE}
           strokeDasharray={`${(pct / 100) * C} ${C}`}
-          strokeLinecap="butt"
           transform={`rotate(-90 ${size / 2} ${size / 2})`}
           style={{ transition: 'stroke-dasharray 0.4s ease' }}
         />
         <text
-          x="50%" y="50%" dominantBaseline="central" textAnchor="middle"
-          style={{ fontSize: '64px', fontWeight: '300', letterSpacing: '-0.02em', fill: '#1A1B1C' }}
+          x="50%" y="52%" dominantBaseline="central" textAnchor="middle"
+          style={{ fill: '#1A1B1C' }}
         >
-          {pct}<tspan style={{ fontSize: '28px' }}>%</tspan>
+          <tspan style={{ fontSize: '56px', fontWeight: '400', letterSpacing: '-0.02em' }}>{pct}</tspan>
+          <tspan dy="-18" style={{ fontSize: '22px', fontWeight: '400' }}>%</tspan>
         </text>
       </svg>
     </div>
@@ -261,17 +270,14 @@ function ConfidenceRow({ label, pct, selected, onClick }) {
         transition: 'background 0.12s ease',
       }}
     >
-      <span style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+      <span style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         <DiamondRadio selected={selected} />
-        <span style={{
-          fontSize: '14px', fontWeight: '400',
-          color: selected ? '#FCFCFC' : '#1A1B1C',
-        }}>
+        <span style={{ fontSize: '14px', fontWeight: '400', color: selected ? '#FCFCFC' : '#1A1B1C' }}>
           {label}
         </span>
       </span>
       <span style={{ fontSize: '14px', color: selected ? '#FCFCFC' : '#1A1B1C' }}>
-        {pct}%
+        {pct}&nbsp;%
       </span>
     </div>
   )
@@ -294,11 +300,11 @@ function DiamondRadio({ selected }) {
 function DiamondArrow({ direction }) {
   return (
     <div style={{
-      width: '44px', height: '44px', border: '1px solid #1A1B1C',
+      width: '34px', height: '34px', border: '1px solid #1A1B1C',
       transform: 'rotate(45deg)', display: 'flex', alignItems: 'center',
       justifyContent: 'center', flexShrink: 0,
     }}>
-      <span style={{ transform: 'rotate(-45deg)', fontSize: '10px', lineHeight: 1, color: '#1A1B1C' }}>
+      <span style={{ transform: 'rotate(-45deg)', fontSize: '9px', lineHeight: 1, color: '#1A1B1C' }}>
         {direction === 'left' ? '◀' : '▶'}
       </span>
     </div>
@@ -311,19 +317,19 @@ const listHeader = {
 }
 
 const cornerBtn = {
-  position: 'absolute', bottom: '36px',
-  display: 'flex', alignItems: 'center', gap: '16px',
+  position: 'absolute', bottom: '38px',
+  display: 'flex', alignItems: 'center', gap: '14px',
   cursor: 'pointer', zIndex: 20, userSelect: 'none',
 }
 
 const btnLabel = {
   fontSize: '14px', fontWeight: '600', letterSpacing: '-0.02em',
-  textTransform: 'uppercase', color: '#1A1B1C', opacity: 0.85,
+  textTransform: 'uppercase', color: '#1A1B1C',
 }
 
 const actionBtn = {
-  background: 'transparent', border: '1px solid #1A1B1C',
+  background: '#FCFCFC', border: '1px solid #1A1B1C',
   color: '#1A1B1C', cursor: 'pointer',
-  padding: '10px 22px', fontSize: '13px', fontWeight: '600',
+  padding: '10px 18px', fontSize: '12px', fontWeight: '600',
   letterSpacing: '0.02em', textTransform: 'uppercase', fontFamily: 'inherit',
 }

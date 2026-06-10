@@ -14,7 +14,7 @@ export default function Select() {
 
   return (
     <div style={{ position: 'relative', width: '100vw', height: '100vh', background: '#FCFCFC', overflow: 'hidden' }}>
-      <Navbar showEnterCode={false} />
+      <Navbar showEnterCode={false} section="ANALYSIS" />
 
       {/* Top-left headings */}
       <div style={{ position: 'absolute', top: '86px', left: '32px', zIndex: 5 }}>
@@ -37,11 +37,11 @@ export default function Select() {
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%) rotate(45deg)',
-        width: 'min(340px, 40vh)', height: 'min(340px, 40vh)',
+        width: 'min(440px, 46vh)', height: 'min(440px, 46vh)',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gridTemplateRows: '1fr 1fr',
-        gap: '8px',
+        gap: '10px',
         zIndex: 10,
       }}>
         {/* grid order (after 45° rotation): TL=top, TR=right, BL=left, BR=bottom */}

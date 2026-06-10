@@ -134,7 +134,8 @@ export default function Upload() {
           {/* Camera option — left */}
           <DiamondOption
             side="left"
-            icon={<CameraGlyph />}
+            icon={<ApertureGlyph />}
+            iconBg="#FCFCFC"
             label={'ALLOW A.I.\nTO SCAN YOUR FACE'}
             onClick={() => setPhase('permission')}
           />
@@ -142,9 +143,30 @@ export default function Upload() {
           <DiamondOption
             side="right"
             icon={<GalleryGlyph />}
+            iconBg="#1A1B1C"
             label={'ALLOW A.I.\nACCESS GALLERY'}
             onClick={() => galleryRef.current?.click()}
           />
+
+          {/* Select preferred way — bottom centre */}
+          <div style={{
+            position: 'absolute', bottom: '64px', left: '50%', transform: 'translateX(-50%)',
+            textAlign: 'center', zIndex: 15,
+          }}>
+            <div style={{
+              width: '26px', height: '26px', margin: '0 auto',
+              border: '1px dotted rgba(26,27,28,0.4)', transform: 'rotate(45deg)',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+            }}>
+              <div style={{ width: '5px', height: '5px', background: 'rgba(26,27,28,0.5)' }} />
+            </div>
+            <p style={{
+              fontSize: '12px', letterSpacing: '0.04em', textTransform: 'uppercase',
+              color: 'rgba(26,27,28,0.5)', marginTop: '12px',
+            }}>
+              SELECT PREFERRED WAY
+            </p>
+          </div>
 
           {error && (
             <p style={{
@@ -197,7 +219,7 @@ export default function Upload() {
 }
 
 /* ── Diamond cluster with icon, connector line + label ── */
-function DiamondOption({ side, icon, label, onClick }) {
+function DiamondOption({ side, icon, iconBg = '#FCFCFC', label, onClick }) {
   const isLeft = side === 'left'
   return (
     <div style={{
@@ -221,21 +243,27 @@ function DiamondOption({ side, icon, label, onClick }) {
         />
       ))}
 
-      {/* icon button */}
+      {/* icon button — thin outer ring, then inner circle */}
       <div
         onClick={onClick}
         style={{
           position: 'absolute', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '136px', height: '136px', borderRadius: '50%',
-          background: '#1A1B1C', cursor: 'pointer',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          border: '1px solid rgba(26,27,28,0.6)', padding: '5px',
+          background: 'transparent', cursor: 'pointer',
           transition: 'transform 0.2s ease',
         }}
         onMouseEnter={(e) => e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1.05)'}
         onMouseLeave={(e) => e.currentTarget.style.transform = 'translate(-50%, -50%) scale(1)'}
       >
-        {icon}
+        <div style={{
+          width: '100%', height: '100%', borderRadius: '50%',
+          background: iconBg,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          {icon}
+        </div>
       </div>
 
       {/* connector line + label */}
@@ -295,10 +323,10 @@ function SettingUpCamera({ onReady }) {
           position: 'absolute', top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
           width: '136px', height: '136px', borderRadius: '50%',
-          background: '#1A1B1C',
+          border: '1px solid rgba(26,27,28,0.6)', background: '#FCFCFC',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <CameraGlyph />
+          <ApertureGlyph />
         </div>
       </div>
       <p className="loading-dots" style={{
@@ -385,24 +413,28 @@ function CameraScreen({ onCapture, onBack, onError }) {
       {captured ? (
         <>
           <p style={{
-            position: 'absolute', top: '96px', left: '50%', transform: 'translateX(-50%)',
-            fontSize: '18px', fontWeight: '600', letterSpacing: '0.02em',
+            position: 'absolute', top: '140px', left: '50%', transform: 'translateX(-50%)',
+            fontSize: '16px', fontWeight: '600', letterSpacing: '0.02em',
             textTransform: 'uppercase', color: '#FCFCFC', zIndex: 20,
             textShadow: '0 1px 8px rgba(0,0,0,0.5)',
           }}>
             GREAT SHOT!
           </p>
-          <div style={{
+
+          <CameraTips light style={{
             position: 'absolute', bottom: '40px', left: 0, right: 0, zIndex: 20,
-            display: 'flex', justifyContent: 'center', gap: '24px',
-          }}>
-            <button onClick={retake} style={cameraActionBtn}>RETAKE</button>
-            <button
-              onClick={() => onCapture(captured)}
-              style={{ ...cameraActionBtn, background: '#FCFCFC', color: '#1A1B1C' }}
-            >
-              USE PHOTO
-            </button>
+          }} />
+
+          {/* Back = retake */}
+          <div onClick={retake} style={{ ...cornerBtn, left: '32px', bottom: '90px', zIndex: 20 }}>
+            <DiamondArrow direction="left" light />
+            <span style={{ ...btnLabel, color: '#FCFCFC', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>BACK</span>
+          </div>
+
+          {/* Proceed — bottom right */}
+          <div onClick={() => onCapture(captured)} style={{ ...cornerBtn, right: '32px', bottom: '90px', zIndex: 20 }}>
+            <span style={{ ...btnLabel, color: '#FCFCFC', textShadow: '0 1px 8px rgba(0,0,0,0.5)' }}>PROCEED</span>
+            <DiamondArrow direction="right" light />
           </div>
         </>
       ) : (
@@ -429,7 +461,7 @@ function CameraScreen({ onCapture, onBack, onError }) {
               background: '#FCFCFC', flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
             }}>
-              <CameraGlyph dark />
+              <ApertureGlyph size={32} />
             </div>
           </div>
 
@@ -512,12 +544,16 @@ function CenterLoader({ text }) {
 }
 
 /* ── Icons ── */
-function CameraGlyph({ dark }) {
-  const stroke = dark ? '#1A1B1C' : '#FCFCFC'
+function ApertureGlyph({ size = 56, color = '#1A1B1C' }) {
+  // camera aperture / shutter icon
   return (
-    <svg width="44" height="44" viewBox="0 0 24 24" fill="none">
-      <path d="M3 7.5h3l1.8-2.5h8.4L18 7.5h3v12H3v-12z" stroke={stroke} strokeWidth="1.4" strokeLinejoin="round" />
-      <circle cx="12" cy="13" r="3.6" stroke={stroke} strokeWidth="1.4" />
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="10" stroke={color} strokeWidth="1.3" />
+      <path
+        d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94"
+        stroke={color} strokeWidth="1.2" strokeLinecap="round"
+      />
+      <circle cx="12" cy="12" r="2.6" fill={color} />
     </svg>
   )
 }
@@ -566,9 +602,3 @@ const dialogBtn = {
   fontFamily: 'inherit', padding: 0,
 }
 
-const cameraActionBtn = {
-  background: 'transparent', border: '1px solid #FCFCFC',
-  color: '#FCFCFC', cursor: 'pointer',
-  padding: '12px 28px', fontSize: '13px', fontWeight: '600',
-  letterSpacing: '0.05em', textTransform: 'uppercase', fontFamily: 'inherit',
-}
