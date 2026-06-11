@@ -118,7 +118,7 @@ export default function Upload() {
 
       {/* Preview thumbnail — top right */}
       {phase === 'choose' && (
-        <div style={{ position: 'absolute', top: '86px', right: '32px', zIndex: 5, textAlign: 'left' }}>
+        <div className="upload-preview" style={{ position: 'absolute', top: '86px', right: '32px', zIndex: 5, textAlign: 'left' }}>
           <p style={{ fontSize: '14px', color: '#1A1B1C', marginBottom: '8px' }}>Preview</p>
           <div style={{ width: '96px', height: '96px', border: '1px solid rgba(26,27,28,0.4)', overflow: 'hidden' }}>
             {preview && <img src={preview} alt="Preview" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
@@ -129,7 +129,7 @@ export default function Upload() {
       {phase === 'analyzing' && <CenterLoader text="PREPARING YOUR ANALYSIS" />}
       {phase === 'settingUp' && <SettingUpCamera onReady={() => setPhase('camera')} />}
 
-      {phase === 'choose' && (
+      {(phase === 'choose' || phase === 'permission') && (
         <>
           {/* Camera option — left */}
           <DiamondOption
@@ -186,9 +186,9 @@ export default function Upload() {
 
       {/* Camera permission dialog */}
       {phase === 'permission' && (
-        <div style={{
-          position: 'absolute', top: '50%', left: '50%',
-          transform: 'translate(-50%, -50%)',
+        <div className="camera-permission" style={{
+          position: 'absolute', top: '50%', left: 'calc(25% + 86px)',
+          transform: 'translateY(-50%)',
           width: '352px', maxWidth: '90vw', background: '#1A1B1C', zIndex: 50,
         }}>
           <p style={{
@@ -446,8 +446,9 @@ function CameraScreen({ onCapture, onBack, onError }) {
         </>
       ) : (
         <>
-          {/* Take picture — right centre */}
+          {/* Take picture — right centre (bottom centre on phones) */}
           <div
+            className="camera-shutter"
             onClick={snap}
             style={{
               position: 'absolute', top: '50%', right: '40px',

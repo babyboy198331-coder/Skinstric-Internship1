@@ -72,8 +72,27 @@ body {
     width: min(280px, 34vh) !important;
     height: min(280px, 34vh) !important;
   }
-  .select-way {
+  .select-way,
+  .upload-preview {
     display: none;
+  }
+
+  /* Camera permission dialog: centre on small screens */
+  .camera-permission {
+    left: 50% !important;
+    top: 50% !important;
+    transform: translate(-50%, -50%) !important;
+  }
+
+  /* Camera screen: shutter button bottom-centre, above the tips */
+  .camera-shutter {
+    top: auto !important;
+    right: auto !important;
+    bottom: 140px !important;
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    flex-direction: column-reverse !important;
+    gap: 10px !important;
   }
 
   /* Demographics page: single column, scrollable */
