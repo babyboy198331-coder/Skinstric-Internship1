@@ -2,7 +2,8 @@ import { useState, useRef, useEffect, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 
-const API_URL = 'https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo'
+const API_URL = import.meta.env.VITE_API_PHASE_TWO
+  || 'https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseTwo'
 
 /* ── Global camera stream registry ──
    Every stream ever opened is tracked here, so no stream can leak —

@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import Navbar from '../components/Navbar'
 
-const API_URL = 'https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseOne'
+const API_URL = import.meta.env.VITE_API_PHASE_ONE
+  || 'https://us-central1-api-skinstric-ai.cloudfunctions.net/skinstricPhaseOne'
 
 const isValidString = (val) => /^[a-zA-Z\s'-.]+$/.test(val.trim()) && val.trim().length > 0
 
