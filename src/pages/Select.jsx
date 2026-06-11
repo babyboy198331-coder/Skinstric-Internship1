@@ -37,7 +37,7 @@ export default function Select() {
       <div style={{
         position: 'absolute', top: '50%', left: '50%',
         transform: 'translate(-50%, -50%) rotate(45deg)',
-        width: 'min(440px, 80vw, 46vh)', height: 'min(440px, 80vw, 46vh)',
+        width: 'min(440px, 63vw, 46vh)', height: 'min(440px, 63vw, 46vh)',
         display: 'grid',
         gridTemplateColumns: '1fr 1fr',
         gridTemplateRows: '1fr 1fr',

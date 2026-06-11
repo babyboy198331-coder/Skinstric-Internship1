@@ -63,18 +63,26 @@ body {
   .upload-option-left {
     left: 50% !important;
     top: 30% !important;
-    width: min(280px, 34vh) !important;
-    height: min(280px, 34vh) !important;
+    width: min(250px, 30vh, 63vw) !important;
+    height: min(250px, 30vh, 63vw) !important;
   }
   .upload-option-right {
     left: 50% !important;
     top: 72% !important;
-    width: min(280px, 34vh) !important;
-    height: min(280px, 34vh) !important;
+    width: min(250px, 30vh, 63vw) !important;
+    height: min(250px, 30vh, 63vw) !important;
   }
   .select-way,
   .upload-preview {
     display: none;
+  }
+
+  /* Landing: side navs drop to the bottom corners so they don't overlap the hero */
+  .landing-nav-left,
+  .landing-nav-right {
+    top: auto !important;
+    transform: none !important;
+    bottom: 140px !important;
   }
 
   /* Camera permission dialog: centre on small screens */

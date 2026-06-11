@@ -228,7 +228,7 @@ function DiamondOption({ side, icon, iconBg = '#FCFCFC', label, onClick }) {
       top: '50%',
       left: isLeft ? '25%' : '75%',
       transform: 'translate(-50%, -50%)',
-      width: 'min(420px, 44vh)', height: 'min(420px, 44vh)',
+      width: 'min(420px, 44vh, 88vw)', height: 'min(420px, 44vh, 88vw)',
       zIndex: 10,
     }}>
       {/* rotating dotted diamonds */}
@@ -308,7 +308,7 @@ function SettingUpCamera({ onReady }) {
       display: 'flex', flexDirection: 'column',
       alignItems: 'center', justifyContent: 'center', background: '#FCFCFC',
     }}>
-      <div style={{ position: 'relative', width: 'min(380px, 40vh)', height: 'min(380px, 40vh)' }}>
+      <div style={{ position: 'relative', width: 'min(380px, 40vh, 62vw)', height: 'min(380px, 40vh, 62vw)' }}>
         {['outer', 'mid', 'inner'].map((ring, i) => (
           <div
             key={ring}
@@ -527,7 +527,7 @@ function CenterLoader({ text }) {
       position: 'absolute', inset: 0, zIndex: 30,
       display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FCFCFC',
     }}>
-      <div style={{ position: 'relative', width: 'min(480px, 50vh)', height: 'min(480px, 50vh)' }}>
+      <div style={{ position: 'relative', width: 'min(480px, 50vh, 63vw)', height: 'min(480px, 50vh, 63vw)' }}>
         {['outer', 'mid', 'inner'].map((ring, i) => (
           <div
             key={ring}

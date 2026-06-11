@@ -67,7 +67,7 @@ export default function Landing() {
         zIndex: 3,
       }}>
         <h1 style={{
-          fontSize: 'clamp(60px, 6.67vw, 128px)',
+          fontSize: 'clamp(38px, 6.67vw, 128px)',
           fontWeight: '300',
           lineHeight: '0.9375',
           letterSpacing: '-0.07em',
@@ -92,6 +92,7 @@ export default function Landing() {
 
       {/* Left nav — fades out when RIGHT is hovered */}
       <div
+        className="landing-nav-left"
         onMouseEnter={() => setHovered('left')}
         onMouseLeave={() => setHovered(null)}
         style={{
@@ -116,6 +117,7 @@ export default function Landing() {
 
       {/* Right nav — fades out when LEFT is hovered */}
       <div
+        className="landing-nav-right"
         onClick={() => navigate('/testing')}
         onMouseEnter={() => setHovered('right')}
         onMouseLeave={() => setHovered(null)}

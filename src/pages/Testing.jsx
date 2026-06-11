@@ -301,9 +301,9 @@ function RotatingDiamonds() {
   }
   return (
     <div style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden' }}>
-      <div className="diamond-outer" style={{ ...base, width: 'min(762px, 70.6vh)', height: 'min(762px, 70.6vh)', opacity: 0.3 }} />
-      <div className="diamond-mid"   style={{ ...base, width: 'min(682px, 63.1vh)', height: 'min(682px, 63.1vh)', opacity: 0.6 }} />
-      <div className="diamond-inner" style={{ ...base, width: 'min(602px, 55.7vh)', height: 'min(602px, 55.7vh)', opacity: 1   }} />
+      <div className="diamond-outer" style={{ ...base, width: 'min(762px, 70.6vh, 65vw)', height: 'min(762px, 70.6vh, 65vw)', opacity: 0.3 }} />
+      <div className="diamond-mid"   style={{ ...base, width: 'min(682px, 63.1vh, 58vw)', height: 'min(682px, 63.1vh, 58vw)', opacity: 0.6 }} />
+      <div className="diamond-inner" style={{ ...base, width: 'min(602px, 55.7vh, 51vw)', height: 'min(602px, 55.7vh, 51vw)', opacity: 1   }} />
     </div>
   )
 }
