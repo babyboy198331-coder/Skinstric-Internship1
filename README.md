@@ -1,16 +1,55 @@
-# React + Vite
+# Skinstric AI
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+An AI-powered skin-analysis platform built to a pixel-perfect Figma spec during a software development internship at Skinstric. Users take a live selfie or upload a photo, the image is sent base64-encoded to an AI REST API, and the results render in an interactive demographics dashboard with editable confidence scores.
 
-Currently, two official plugins are available:
+**Live demo:** https://skinstric-internship1.vercel.app
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Features
 
-## React Compiler
+- Live selfie capture via `getUserMedia`, or upload a photo instead
+- Multi-step flow: Landing -> Upload -> Select -> Testing -> Demographics
+- Image sent base64-encoded to an AI REST API for analysis
+- Interactive demographics dashboard with editable confidence scores
+- Built to a pixel-perfect Figma spec using a reusable component library
+- Fully responsive across desktop, tablet, and mobile
+- Shipped through a CI/CD pipeline to Vercel
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack
 
-## Expanding the ESLint configuration
+React 19, Vite, React Router, Tailwind CSS, react-icons, REST APIs, getUserMedia
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Project Structure
+
+```
+src/
+  assets/        static assets
+  components/    reusable UI components
+  pages/
+    Landing.jsx
+    Upload.jsx
+    Select.jsx
+    Testing.jsx
+    Demographics.jsx
+  App.jsx
+  main.jsx
+```
+
+## Getting Started
+
+```
+npm install
+npm run dev
+```
+
+Open http://localhost:5173 in your browser.
+
+To build for production:
+
+```
+npm run build
+npm run preview
+```
+
+## About
+
+Built during a software development internship at Skinstric.
